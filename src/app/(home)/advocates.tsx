@@ -10,11 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Advocate } from "@/db/schema";
-import { useSearchQuery } from "@/lib/search-query";
+import { AdvocateWithSpecialties } from "@/db/schema";
+import { useSearchQuery } from "@/lib/filter-provider";
 import { AdvocatesSkeleton } from "./advocates-skeleton";
 
-export function Advocates({ data }: { data: Promise<Advocate[]> }) {
+export function Advocates({
+  data,
+}: {
+  data: Promise<AdvocateWithSpecialties[]>;
+}) {
   const { isPending } = useSearchQuery();
 
   if (isPending) return <AdvocatesSkeleton />;
@@ -46,7 +50,7 @@ export function Advocates({ data }: { data: Promise<Advocate[]> }) {
   );
 }
 
-function AdvocateRow({ advocate }: { advocate: Advocate }) {
+function AdvocateRow({ advocate }: { advocate: AdvocateWithSpecialties }) {
   return (
     <TableRow>
       <TableCell>{advocate.firstName}</TableCell>

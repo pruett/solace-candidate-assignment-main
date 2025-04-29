@@ -1,24 +1,25 @@
 import "server-only";
 
-import { type Advocate } from "@/db/schema";
+import { type AdvocateWithSpecialties } from "@/db/schema";
 
 export async function getAdvocates({
-  query = "",
+  filter = "",
 }: {
-  query?: string;
-}): Promise<Advocate[]> {
+  filter?: string;
+}): Promise<AdvocateWithSpecialties[]> {
   // Artificial delay to simulate network latency
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/advocates?q=${query}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const url = `${process.env.API_URL}/advocates${
+    filter ? `?filter=${filter}` : ""
+  }`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch advocates");
