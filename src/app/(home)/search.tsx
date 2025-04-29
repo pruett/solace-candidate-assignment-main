@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSearchQuery } from "@/lib/filter-provider";
 import { Loader2 } from "lucide-react";
-import { useSearchQuery } from "@/lib/search-query";
 
 export function Search() {
-  const { query, setQuery, isPending } = useSearchQuery();
+  const { filter, setFilter, isPending } = useSearchQuery();
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setFilter(event.target.value);
   };
 
   return (
@@ -18,7 +18,7 @@ export function Search() {
         <div className="relative flex items-center w-full">
           <Input
             className="pr-10"
-            value={query || ""}
+            value={filter || ""}
             placeholder="Search"
             onChange={handleOnChange}
           />
@@ -30,9 +30,9 @@ export function Search() {
         <Button
           variant="secondary"
           onClick={() => {
-            setQuery(null);
+            setFilter(null);
           }}
-          disabled={!query || isPending}
+          disabled={!filter || isPending}
         >
           Reset
         </Button>

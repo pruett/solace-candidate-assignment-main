@@ -1,20 +1,20 @@
+import { Suspense } from "react";
 import {
   createSearchParamsCache,
   parseAsString,
   type SearchParams,
 } from "nuqs/server";
-import { Suspense } from "react";
 
 import { getAdvocates } from "@/lib/advocates";
-
-import { SearchQueryProvider } from "@/lib/search-query";
+import { FilterProvider } from "@/lib/filter-provider";
 import { cn } from "@/lib/utils";
+
 import { Advocates } from "./advocates";
 import { AdvocatesSkeleton } from "./advocates-skeleton";
 import { Search } from "./search";
 
 export const searchParamsCache = createSearchParamsCache({
-  q: parseAsString.withDefault(""),
+  f: parseAsString.withDefault(""),
 });
 
 export default async function Page({
@@ -22,9 +22,9 @@ export default async function Page({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { q: query } = searchParamsCache.parse(await searchParams);
+  const { f: filter } = searchParamsCache.parse(await searchParams);
 
-  const dataPromise = getAdvocates({ query });
+  const dataPromise = getAdvocates({ filter });
 
   return (
     <main
@@ -52,13 +52,13 @@ export default async function Page({
           </p>
         </div>
 
-        <SearchQueryProvider>
+        <FilterProvider>
           <Search />
 
           <Suspense fallback={<AdvocatesSkeleton />}>
             <Advocates data={dataPromise} />
           </Suspense>
-        </SearchQueryProvider>
+        </FilterProvider>
       </div>
     </main>
   );
